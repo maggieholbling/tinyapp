@@ -13,7 +13,7 @@ const urlDatabase = {
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get("/", (req, res) => {
+app.get("/", (reqbody, res) => {
   res.send("Hello!");
 });
 
@@ -46,6 +46,14 @@ app.get("/urls/:shortURL", (req, res) => {
     shortURL: req.params.shortURL };
   res.render("urls_show", templateVars);
 });
+
+//updating links
+app.post("/urls/:shortURL", (req, res) => {
+  const shortURL = req.params.shortURL;
+  urlDatabase[req.params.shortURL] = req.body.newLongURL;
+  res.redirect("/urls/" + shortURL);
+})
+
 
 //deleting a url
 app.post("/urls/:shortURL/delete", (req, res) => {
