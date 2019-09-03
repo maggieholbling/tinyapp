@@ -17,23 +17,29 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+//page shows index of urls
 app.get("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
+//generating a short url
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   if (!urlDatabase[shortURL]) {
     urlDatabase[shortURL] = req.body.longURL;
+  } else {
+    res.send("Error, please refresh."); //possibility for recursion/ while loop to find a unique string
   }
   res.redirect("/urls/" + shortURL);
 });
 
+//new url page
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+//page shows short url
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { 
     longURL: urlDatabase[req.params.shortURL],
@@ -41,6 +47,14 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+//deleting a url
+app.post("/urls/:shortURL/delete", (req, res) => {
+  const shortURL = req.params.shortURL;
+  delete urlDatabase[shortURL];
+  res.redirect("/urls/");
+});
+
+//redirecting back to original url
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
