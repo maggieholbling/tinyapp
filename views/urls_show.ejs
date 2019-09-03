@@ -10,7 +10,13 @@
   <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
-        <h5 class="card-title">TinyURL for: <%= longURL %></h5>
+        <form class="form-inline justify-content-center" method="POST" action="/urls/<%= shortURL %>">
+          <h5 class="card-title">TinyURL for:</h5>
+          <input class="form-control" type="text" name="newLongURL" value="<%= longURL %>" style="width: 300px; margin: 1em">
+          <button class="btn btn-outline-success">Change Link</button>
+        </form>
+      
+
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
       </div>
     <div class="card-footer text-muted"></div>
