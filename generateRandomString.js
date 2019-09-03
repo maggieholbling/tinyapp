@@ -18,7 +18,6 @@ const generateRandomString = function () {
   for(let k = 0; k < 6; k++) {
     result += newArray[Math.floor(Math.random() * newArray.length)];
   }
-  console.log(result);
   return result;
 }
 
