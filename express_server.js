@@ -26,12 +26,14 @@ app.use(bodyParser.urlencoded({extended: true}));
  * @param {*} value the value that's being looked for - must be primitive type
  */
 const userKeyLookup = (userKey, object, value) => {
+  let result = {emailExists: false};
   Object.keys(object).forEach((key) => {
     if (object[key][userKey] === value) {
-      return {emailExists: true, user: object[key]};
+      console.log("found")
+      result = {emailExists: true, user: object[key]};
     }
   })
-  return {emailExists: false};
+  return result;
 };
 
 //registration page
@@ -63,6 +65,9 @@ app.post('/register', (req, res) => {
     res.redirect("/urls");
   }
 });
+
+//curl -d "email=here&password=something" -X POST http://localhost:8080/register
+// curl -d "email=&password=something" -X POST http://localhost:8080/register
 
 //login
 app.post('/login', (req, res) => {
