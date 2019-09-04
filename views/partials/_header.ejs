@@ -18,10 +18,8 @@
         <button type="submit" class="btn btn-outline-light">Logout</button>
       </form>
     <% } else { %>
-      <form class="form-inline justify-content-right" method="POST" action="/login">
-        <input class="form-control" type="text" name="username" placeholder="Username" style="width: 150px; margin: 1em"></input>
-        <button type="submit" class="btn btn-outline-light">Login</button>
-      </form>
+      <a class="nav-item nav-link" href="/register" style="color:rgba(255,255,255,.5)">Register</a>
+      <a class="nav-item nav-link" href="/login" style="color:rgba(255,255,255,.5)">Login</a>
     <% } %>
     
   </nav>
