@@ -29,7 +29,6 @@ const userKeyLookup = (userKey, object, value) => {
   let result = {emailExists: false};
   Object.keys(object).forEach((key) => {
     if (object[key][userKey] === value) {
-      console.log("found")
       result = {emailExists: true, user: object[key]};
     }
   })
@@ -67,17 +66,40 @@ app.post('/register', (req, res) => {
 });
 
 //curl -d "email=here&password=something" -X POST http://localhost:8080/register
+//curl -d "email=here&password=something" -X POST http://localhost:8080/login
 // curl -d "email=&password=something" -X POST http://localhost:8080/register
 
-//login
+//login page
+app.get('/login', (req, res) => {
+  let templateVars = { user: users[req.cookies["user_id"]] };
+  res.render("login", templateVars);
+});
+
+//handling login
 app.post('/login', (req, res) => {
-  res.cookie("username", req.body.username);
+  const emailLookupResult = userKeyLookup("email", users, req.body.email);
+  if (req.body.email === "" || req.body.password === "") {
+    res.status(400);
+    res.send("Please fill out your email and password.");
+  
+  } else if (!emailLookupResult.emailExists) {
+    res.status(400);
+    res.send("No user found for email address: " + req.body.email);
+  
+  } else if(emailLookupResult.user.password !== req.body.password) {
+    res.status(400);
+    res.send("Incorrect password");
+  
+  } else {
+  res.cookie("user_id", emailLookupResult.user.id);
+
   res.redirect("/urls");
+  }
 });
 
 //logout
 app.post('/logout', (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 
