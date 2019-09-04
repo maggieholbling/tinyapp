@@ -15,7 +15,7 @@
       <!-- <label for="username">Enter a URL:</label> -->
     <% if (username) { %>
       <form class="form-inline justify-content-right" method="POST" action="/logout">
-        <p class ="navbar-brand text-center">Welcome, <%= username %>!</p>
+        <div class ="navbar-brand text-center" vertical-align="middle">Welcome, <%= username %>!</div>
         <button type="submit" class="btn btn-outline-light">Logout</button>
       </form>
     <% } else { %>
