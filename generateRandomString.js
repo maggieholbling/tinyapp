@@ -1,4 +1,8 @@
-const generateRandomString = function () {
+/**
+ * Generates a string of random alphanumeric characters
+ * @param {number} charLength the number of characters in the resulting string
+ */
+const generateRandomString = function (charLength) {
   let result = "";
   const characters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
   const upperNumbers = [];
@@ -15,7 +19,7 @@ const generateRandomString = function () {
   
   var newArray = upperNumbers.concat(characters);
 
-  for(let k = 0; k < 6; k++) {
+  for(let k = 0; k < charLength; k++) {
     result += newArray[Math.floor(Math.random() * newArray.length)];
   }
 
