@@ -83,10 +83,6 @@ app.post('/register', (req, res) => {
   }
 });
 
-//curl -d "email=here&password=something" -X POST http://localhost:8080/register
-//curl -d "email=here&password=something" -X POST http://localhost:8080/login
-// curl -d "email=&password=something" -X POST http://localhost:8080/register
-
 //login page
 app.get('/login', (req, res) => {
   let templateVars = { user: users[req.cookies["user_id"]] };
@@ -123,7 +119,7 @@ app.post('/logout', (req, res) => {
 
 //page shows index of urls
 app.get("/urls", (req, res) => {
-  if (!req.cookies["user_id"]) res.redirect("/login");
+  if (!req.cookies["user_id"]) return res.redirect("/login");
   const userURLDatabase = filterByInnerKey("userID", urlDatabase, req.cookies["user_id"]);
   let templateVars = {
     user: users[req.cookies["user_id"]],
@@ -137,25 +133,18 @@ app.post("/urls", (req, res) => {
   let shortURL;
   do { shortURL = generateRandomString(6);
   } while (urlDatabase[shortURL]);
-  // if (urlDatabase[shortURL]) {
-  //   res.send("Error, please refresh."); //possibility for recursion/ while loop to find a unique string
-  // } else {
     urlDatabase[shortURL] = {
       longURL: req.body.longURL,
       userID: req.cookies["user_id"]
     };
     res.redirect("/urls/" + shortURL);
-  // }
 });
 
 //new url page
 app.get("/urls/new", (req, res) => {
-  if (!req.cookies["user_id"]) {
-    res.redirect("/login");
-  } else {
+  if (!req.cookies["user_id"]) return res.redirect("/login");
   let templateVars = { user: users[req.cookies["user_id"]] };
   res.render("urls_new", templateVars);
-  }
 });
 
 //page shows short url
@@ -198,7 +187,7 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.redirect("/urls/");
 });
 
