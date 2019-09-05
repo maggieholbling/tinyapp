@@ -1,6 +1,6 @@
 const express = require("express");
 var cookieSession = require('cookie-session');
-const generateRandomString = require("./generateRandomString");
+const { generateRandomString, findByInnerKey, filterByInnerKey } = require("./helpers");
 const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 8080;
@@ -22,40 +22,6 @@ const users = {};
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
-/**
- * Loops through an object and tests the element's (nested object's) - key value against the given value.
- * If the value is found, it returns an object with emailExists: true and the user (nested) object it tested against.
- * If not found, it returns an object with emailExists: false
- * @param {String} userKey the user's (nested object's) key being tested for the given value
- * @param {Object} object the object to loop through
- * @param {*} value the value that's being looked for - must be primitive type
- */
-const userKeyLookup = (userKey, object, value) => {
-  let result = {emailExists: false};
-  Object.keys(object).forEach((key) => {
-    if (object[key][userKey] === value) {
-      result = {emailExists: true, user: object[key]};
-    }
-  })
-  return result;
-};
-
-/**
- * Loops through an object and trims it down to just the nested objects, whose key (specified by param innerKey) value matches the given value.
- * @param {String} innerKey the user's (nested object's) key being tested for the given value
- * @param {Object} object the object to loop through
- * @param {*} value the value that's being looked for - must be primitive type
- */
-const filterByInnerKey = (innerKey, object, value) => {
-  let result = {};
-  Object.keys(object).forEach((key) => {
-    if (object[key][innerKey] === value) {
-      result[key] = object[key];
-    }
-  })
-  return result;
-};
-
 //registration page
 app.get('/register', (req, res) => {
   let templateVars = { user: users[req.session.user_id] };
@@ -69,7 +35,7 @@ app.post('/register', (req, res) => {
     res.status(400);
     res.send("Please fill out your email and password.");
   
-  } else if (userKeyLookup("email", users, req.body.email).emailExists) {
+  } else if (findByInnerKey("email", users, req.body.email)) {
       res.status(400);
       res.send("Email already in use.");
   
@@ -96,21 +62,21 @@ app.get('/login', (req, res) => {
 
 //handling login
 app.post('/login', (req, res) => {
-  const emailLookupResult = userKeyLookup("email", users, req.body.email);
+  const user = findByInnerKey("email", users, req.body.email);
   if (req.body.email === "" || req.body.password === "") {
     res.status(400);
     res.send("Please fill out your email and password.");
   
-  } else if (!emailLookupResult.emailExists) {
+  } else if (!user) {
     res.status(400);
     res.send("No user found for email address: " + req.body.email);
   
-  } else if(!bcrypt.compareSync(req.body.password, emailLookupResult.user.password)) {
+  } else if(!bcrypt.compareSync(req.body.password, user.password)) {
     res.status(400);
     res.send("Incorrect password");
   
   } else {
-    req.session.user_id = emailLookupResult.user.id;
+    req.session.user_id = user.id;
 
   res.redirect("/urls");
   }
