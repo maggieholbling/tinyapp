@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 
-const { findByInnerKey, filterByInnerKey } = require('../helpers.js');
+const { findByInnerKey, filterByInnerKey } = require('../server/helpers.js/index.js');
 
 const users = {
   "userRandomID": {
