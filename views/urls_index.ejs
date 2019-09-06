@@ -17,6 +17,7 @@
         <tr>
           <th scope="col">Short URL</th>
           <th scope="col">Long URL</th>
+          <th scope="col">Hit Counter</th>
           <th scope="col"></th>
           <th scope="col"></th>
         </tr>
@@ -26,6 +27,7 @@
           <tr>
             <td><a href="/u/<%= url %>" style="color: green">/u/<%= url %></a></td>
             <td><%= urls[url].longURL %></td>
+            <td><%= urls[url].count %></td>
             <td>
               <a href="/urls/<%= url %>"><button class="btn btn-outline-success">Edit</button></a>
             </td>
@@ -37,6 +39,7 @@
         <% } %>
         <tr>
           <td><a href="/urls/new" style="color: green">Create a New Short Link</a></td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>

@@ -10,11 +10,22 @@ const urlDatabase = {};
 const users = {};
 
 app.set("view engine", "ejs");
+
+//MIDDLEWARE
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
   keys: ["abc8dhdla"],
 }));
+// app.use(cookieSession({
+//   name: 'uniqueUser',
+//   keys: ["abc8dhdla"],
+// }));
+
+// //Setting a cookie for each user
+// app.use((req, res, next) => {
+
+// })
 
 //POST METHODS
 //handling registration
@@ -87,7 +98,8 @@ app.post("/urls", (req, res) => {
   } while (urlDatabase[shortURL]);
   urlDatabase[shortURL] = {
     longURL: req.body.longURL,
-    userID: req.session.user_id
+    userID: req.session.user_id,
+    count: 0
   };
   res.redirect("/urls/" + shortURL);
 });
@@ -181,12 +193,17 @@ app.get("/urls/:shortURL", (req, res) => {
 
 //redirecting back to original url
 app.get("/u/:shortURL", (req, res) => {
-  if (!urlDatabase[req.params.shortURL]) {
+  const shortURL = req.params.shortURL;
+  if (!urlDatabase[shortURL]) {
     res.status(400);
     return res.send("URL doesn't exist");
   }
-  const longURL = urlDatabase[req.params.shortURL].longURL;
-  if (longURL.includes('https://')) return res.redirect(longURL);
+  const longURL = urlDatabase[shortURL].longURL;
+  if (longURL.includes('https://')) {
+    urlDatabase[shortURL].count++;
+    return res.redirect(longURL);
+  }
+  urlDatabase[shortURL].count++;
   res.redirect('https://' + longURL);
 });
 
