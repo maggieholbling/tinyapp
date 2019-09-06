@@ -16,16 +16,17 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
   keys: ["abc8dhdla"],
+  expires: new Date("6666")
 }));
-// app.use(cookieSession({
-//   name: 'uniqueUser',
-//   keys: ["abc8dhdla"],
-// }));
 
-// //Setting a cookie for each user
-// app.use((req, res, next) => {
-
-// })
+//Setting a cookie for each user even when they are logged out
+app.use((req, res, next) => {
+  const randomID = generateRandomString(9);
+  if (!req.session.global_user_id) {
+  req.session.global_user_id = randomID;
+  }
+  next();
+})
 
 //POST METHODS
 //handling registration
@@ -99,7 +100,8 @@ app.post("/urls", (req, res) => {
   urlDatabase[shortURL] = {
     longURL: req.body.longURL,
     userID: req.session.user_id,
-    count: 0
+    count: 0,
+    cookieArray: []
   };
   res.redirect("/urls/" + shortURL);
 });
@@ -194,6 +196,7 @@ app.get("/urls/:shortURL", (req, res) => {
 //redirecting back to original url
 app.get("/u/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
+  const globalCookie = req.session.global_user_id;
   if (!urlDatabase[shortURL]) {
     res.status(400);
     return res.send("URL doesn't exist");
@@ -202,6 +205,9 @@ app.get("/u/:shortURL", (req, res) => {
   if (longURL.includes('https://')) {
     urlDatabase[shortURL].count++;
     return res.redirect(longURL);
+  }
+  if (!urlDatabase[shortURL].cookieArray.includes(globalCookie)) {
+    urlDatabase[shortURL].cookieArray.push(globalCookie);
   }
   urlDatabase[shortURL].count++;
   res.redirect('https://' + longURL);
