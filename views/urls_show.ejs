@@ -18,6 +18,9 @@
       
 
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>" style="color: green"><%= shortURL %></a></p>
+        <% for(const timestampObj of url.timestamps) { %>
+        <p class="card-text">User <%= timestampObj.globalUserID %> visited on <%= timestampObj.time %></p>
+        <% } %>
       </div>
     <div class="card-footer text-muted"></div>
   </div>

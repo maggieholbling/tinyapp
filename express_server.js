@@ -101,7 +101,8 @@ app.post("/urls", (req, res) => {
     longURL: req.body.longURL,
     userID: req.session.user_id,
     count: 0,
-    cookieArray: []
+    cookieArray: [],
+    timestamps: []
   };
   res.redirect("/urls/" + shortURL);
 });
@@ -189,7 +190,9 @@ app.get("/urls/:shortURL", (req, res) => {
   let templateVars = {
     user: users[req.session.user_id],
     longURL: urlDatabase[shortURL].longURL,
-    shortURL };
+    shortURL,
+    url: urlDatabase[shortURL]
+   };
   res.render("urls_show", templateVars);
 });
 
@@ -209,6 +212,10 @@ app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase[shortURL].cookieArray.includes(globalCookie)) {
     urlDatabase[shortURL].cookieArray.push(globalCookie);
   }
+  urlDatabase[shortURL].timestamps.push({ 
+    globalUserID: globalCookie,
+    time: Date()
+  })
   urlDatabase[shortURL].count++;
   res.redirect('https://' + longURL);
 });
