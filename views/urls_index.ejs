@@ -24,7 +24,7 @@
       <tbody>
         <% for(const url in urls) {%>
           <tr>
-            <td><%= url %></td>
+            <td><a href="/u/<%= url %>" style="color: green">/u/<%= url %></a></td>
             <td><%= urls[url].longURL %></td>
             <td>
               <a href="/urls/<%= url %>"><button class="btn btn-outline-success">Edit</button></a>
