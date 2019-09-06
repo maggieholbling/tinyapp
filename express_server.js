@@ -79,7 +79,7 @@ app.post('/login', (req, res) => {
 
 //logout
 app.post('/logout', (req, res) => {
-  req.session = null;
+  req.session.user_id = null;
   res.redirect("/urls");
 });
 
@@ -200,14 +200,13 @@ app.get("/urls/:shortURL", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   const globalCookie = req.session.global_user_id;
+  let longURL = urlDatabase[shortURL].longURL;
   if (!urlDatabase[shortURL]) {
     res.status(400);
     return res.send("URL doesn't exist");
   }
-  const longURL = urlDatabase[shortURL].longURL;
-  if (longURL.includes('https://')) {
-    urlDatabase[shortURL].count++;
-    return res.redirect(longURL);
+  if (!longURL.includes('https://')) {
+    longURL = 'https://' + longURL;
   }
   if (!urlDatabase[shortURL].cookieArray.includes(globalCookie)) {
     urlDatabase[shortURL].cookieArray.push(globalCookie);
@@ -217,7 +216,7 @@ app.get("/u/:shortURL", (req, res) => {
     time: Date()
   })
   urlDatabase[shortURL].count++;
-  res.redirect('https://' + longURL);
+  res.redirect(longURL);
 });
 
 //getting a json file of the entire url database
