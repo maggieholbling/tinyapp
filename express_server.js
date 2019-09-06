@@ -186,7 +186,8 @@ app.get("/u/:shortURL", (req, res) => {
     return res.send("URL doesn't exist");
   }
   const longURL = urlDatabase[req.params.shortURL].longURL;
-  res.redirect(longURL);
+  if (longURL.includes('https://')) return res.redirect(longURL);
+  res.redirect('https://' + longURL);
 });
 
 //getting a json file of the entire url database
