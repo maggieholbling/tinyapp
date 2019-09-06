@@ -1,16 +1,16 @@
 # TinyApp Project
 
-TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (similar to bit.ly).
+TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs, see link usage statistics (hit counter, hit counter for unique users and timestamps for each visit on a url), similar to bit.ly.
 
 ## Final Product
-Urls page - shows user's created urls
-!["screenshot of urls page"](https://github.com/maggieholbling/tinyapp/blob/master/docs/urls-page.png?raw=true)
+Urls page - shows user's created urls and tracks the number of all hits and number of hits by unique users
+!["screenshot of urls page"](https://github.com/maggieholbling/tinyapp/blob/master/docs/url-page.png)
 
 Registration page - lets user register
 !["screenshot of registration page"](https://github.com/maggieholbling/tinyapp/blob/master/docs/registration-page.png?raw=true)
 
-Short url page - enables user to change the original url
-!["screenshot of short url page"](https://github.com/maggieholbling/tinyapp/blob/master/docs/show-url-page.png?raw=true)
+Short url page - enables user to change the original url, shows visits by all users (even if they aren't logged in)
+!["screenshot of short url page"](https://github.com/maggieholbling/tinyapp/blob/master/docs/edit-url-with-tracking.png)
 
 ## Dependencies
 
