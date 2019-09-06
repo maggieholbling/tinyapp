@@ -1,25 +1,23 @@
 /**
  * Generates a string of random alphanumeric characters
  * @param {number} charLength the number of characters in the resulting string
+ * @returns a string of random alphanumeric characters
  */
-const generateRandomString = function (charLength) {
+const generateRandomString = function(charLength) {
   let result = "";
   const characters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-  const upperNumbers = [];
+  const upperAndNumbers = [];
 
-  for(let i = 0; i < characters.length; i++) {
-    
+  for (let i = 0; i < characters.length; i++) {
     const upperChar = characters[i].toUpperCase();
-    upperNumbers.push(upperChar);
-    
+    upperAndNumbers.push(upperChar);
     if (i < 10) {
-      upperNumbers.push(i);
+      upperAndNumbers.push(i);
     }
   }
   
-  var newArray = upperNumbers.concat(characters);
-
-  for(let k = 0; k < charLength; k++) {
+  const newArray = upperAndNumbers.concat(characters);
+  for (let k = 0; k < charLength; k++) {
     result += newArray[Math.floor(Math.random() * newArray.length)];
   }
 
@@ -39,7 +37,7 @@ const findByInnerKey = (innerKey, object, value) => {
     if (!result && object[key][innerKey] === value) {
       result = object[key];
     }
-  })
+  });
   return result;
 };
 
@@ -56,7 +54,7 @@ const filterByInnerKey = (innerKey, object, value) => {
     if (object[key][innerKey] === value) {
       result[key] = object[key];
     }
-  })
+  });
   return result;
 };
 
